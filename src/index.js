@@ -1,12 +1,21 @@
-const express = require("express");
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const serverConfig = require("./config/serverConfig");
-const connectDB = require("./config/dbConfig");
+const ServerConfig = require('./config/serverConfig');
+const connectDB = require('./config/dbConfig');
+
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+app.use(bodyParser.json());
+app.use(bodyParser.text());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.listen(serverConfig.PORT, async () => {
-  await connectDB();
-  console.log(`Server is running on port ${serverConfig.PORT}`);
+app.post('/ping',(req , res) => {
+  console.log(req.body);
+  return res.json({ message: 'pong' });
+});
+
+app.listen(ServerConfig.PORT, async () => {
+    await connectDB();
+    console.log(`Server started at port ${ServerConfig.PORT}...!!`);
 });
